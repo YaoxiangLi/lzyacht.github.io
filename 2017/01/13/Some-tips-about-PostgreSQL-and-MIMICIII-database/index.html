@@ -1,0 +1,753 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Learning never exhausts the mind.">
+  <meta name="author" content="Yaoxiang Li">
+  <meta name="keywords" content="">
+  <title>Some tips about PostgreSQL and MIMICIII database - The Seventh Paradigm</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_6peoq002giu.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>The Seventh Paradigm</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2017-01-13 21:40" pubdate>
+      January 13, 2017 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.3k words
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      65
+       mins
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Some tips about PostgreSQL and MIMICIII database</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h2 id="Intro-to-PostgreSQL"><a href="#Intro-to-PostgreSQL" class="headerlink" title="Intro to PostgreSQL"></a>Intro to PostgreSQL</h2><h3 id="Architectural-Fundamentals"><a href="#Architectural-Fundamentals" class="headerlink" title="Architectural Fundamentals"></a>Architectural Fundamentals</h3><p>PostgreSQL uses a client/server model. A PostgreSQL session consists of the following cooperating processes (programs):</p>
+<ol>
+<li><p>A server process, which manages the database files, accepts connections to the database from client applications, and performs database actions on behalf of the clients. The database server program is called postgres.</p>
+</li>
+<li><p>The user’s client (frontend) application that wants to perform database operations. Client applications can be very diverse in nature: a client could be a text-oriented tool, a graphical application, a web server that accesses the database to display web pages, or a specialized database maintenance tool. Some client applications are supplied with the PostgreSQL distribution; most are developed by users.</p>
+</li>
+</ol>
+<p>The PostgreSQL server can handle multiple concurrent connections from clients. To achieve this it starts (“forks”) a new process for each connection. From that point on, the client and the new server process communicate without intervention by the original postgres process. Thus, the master server process is always running, waiting for client connections, whereas client and associated server processes come and go. (All of this is of course invisible to the user. We only mention it here for completeness.)</p>
+<h3 id="Concepts"><a href="#Concepts" class="headerlink" title="Concepts"></a>Concepts</h3><p>PostgreSQL is a relational database management system (RDBMS). That means it is a system for managing data stored in relations. Relation is essentially a mathematical term for table. The notion of storing data in tables is so commonplace today that it might seem inherently obvious, but there are a number of other ways of organizing databases. Files and directories on Unix-like operating systems form an example of a hierarchical database. A more modern development is the object-oriented database.</p>
+<ol>
+<li><p>Each table is a named collection of rows. Each row of a given table has the same set of named columns, and each column is of a specific data type. Whereas columns have a fixed order in each row, it is important to remember that SQL does not guarantee the order of the rows within the table in any way (although they can be explicitly sorted for display).</p>
+</li>
+<li><p>Tables are grouped into databases, and a collection of databases managed by a single PostgreSQL server instance constitutes a database cluster.</p>
+</li>
+</ol>
+<h3 id="Creating-a-New-Table"><a href="#Creating-a-New-Table" class="headerlink" title="Creating a New Table"></a>Creating a New Table</h3><p>You can create a new table by specifying the table name, along with all column names and their types:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> weather (
+    city            <span class="hljs-built_in">varchar</span>(<span class="hljs-number">80</span>),
+    temp_lo         <span class="hljs-built_in">int</span>,           <span class="hljs-comment">-- low temperature</span>
+    temp_hi         <span class="hljs-built_in">int</span>,           <span class="hljs-comment">-- high temperature</span>
+    prcp            <span class="hljs-built_in">real</span>,          <span class="hljs-comment">-- precipitation</span>
+    <span class="hljs-built_in">date</span>            <span class="hljs-built_in">date</span>
+);</code></pre>
+
+<p>You can enter this into psql with the line breaks. psql will recognize that the command is not terminated until the semicolon.<br>White space (i.e., spaces, tabs, and newlines) can be used freely in SQL commands. That means you can type the command aligned differently than above, or even all on one line. Two dashes (“–”) introduce comments. Whatever follows them is ignored up to the end of the line. SQL is case insensitive about key words and identifiers, except when identifiers are double-quoted to preserve the case (not done above).<br>varchar(80) specifies a data type that can store arbitrary character strings up to 80 characters in length. int is the normal integer type. real is a type for storing single precision floating-point numbers. date should be self-explanatory. (Yes, the column of type date is also named date. This might be convenient or confusing — you choose.)<br>PostgreSQL supports the standard SQL types int, smallint, real, double precision, char(N), varchar(N), date, time, timestamp, and interval, as well as other types of general utility and a rich set of geometric types. PostgreSQL can be customized with an arbitrary number of user-defined data types. Consequently, type names are not key words in the syntax, except where required to support special cases in the SQL standard.<br>The second example will store cities and their associated geographical location:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> cities (
+    <span class="hljs-keyword">name</span>            <span class="hljs-built_in">varchar</span>(<span class="hljs-number">80</span>),
+    location        point
+);</code></pre>
+
+<p>The point type is an example of a PostgreSQL-specific data type.<br>Finally, it should be mentioned that if you don’t need a table any longer or want to recreate it differently you can remove it using the following command:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> tablename;</code></pre>
+
+<h3 id="Populating-a-Table-With-Rows"><a href="#Populating-a-Table-With-Rows" class="headerlink" title="Populating a Table With Rows"></a>Populating a Table With Rows</h3><p>The INSERT statement is used to populate a table with rows:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> weather <span class="hljs-keyword">VALUES</span> (<span class="hljs-string">&#x27;San Francisco&#x27;</span>, <span class="hljs-number">46</span>, <span class="hljs-number">50</span>, <span class="hljs-number">0.25</span>, <span class="hljs-string">&#x27;1994-11-27&#x27;</span>);</code></pre>
+
+<p>Note that all data types use rather obvious input formats. Constants that are not simple numeric values usually must be surrounded by single quotes (‘), as in the example. The date type is actually quite flexible in what it accepts, but for this tutorial we will stick to the unambiguous format shown here.<br>The point type requires a coordinate pair as input, as shown here:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> cities <span class="hljs-keyword">VALUES</span> (<span class="hljs-string">&#x27;San Francisco&#x27;</span>, <span class="hljs-string">&#x27;(-194.0, 53.0)&#x27;</span>);</code></pre>
+
+<p>The syntax used so far requires you to remember the order of the columns. An alternative syntax allows you to list the columns explicitly:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> weather (city, temp_lo, temp_hi, prcp, <span class="hljs-built_in">date</span>)
+    <span class="hljs-keyword">VALUES</span> (<span class="hljs-string">&#x27;San Francisco&#x27;</span>, <span class="hljs-number">43</span>, <span class="hljs-number">57</span>, <span class="hljs-number">0.0</span>, <span class="hljs-string">&#x27;1994-11-29&#x27;</span>);</code></pre>
+
+<p>You can list the columns in a different order if you wish or even omit some columns, e.g., if the precipitation is unknown:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> weather (<span class="hljs-built_in">date</span>, city, temp_hi, temp_lo)
+    <span class="hljs-keyword">VALUES</span> (<span class="hljs-string">&#x27;1994-11-29&#x27;</span>, <span class="hljs-string">&#x27;Hayward&#x27;</span>, <span class="hljs-number">54</span>, <span class="hljs-number">37</span>);</code></pre>
+
+<p>Many developers consider explicitly listing the columns better style than relying on the order implicitly.<br>Please enter all the commands shown above so you have some data to work with in the following sections.<br>You could also have used COPY to load large amounts of data from flat-text files. This is usually faster because the COPY command is optimized for this application while allowing less flexibility than INSERT. An example would be:</p>
+<pre><code class="hljs sql">COPY weather FROM &#x27;/home/user/weather.txt&#x27;;</code></pre>
+
+<p>where the file name for the source file must be available on the machine running the backend process, not the client, since the backend process reads the file directly. You can read more about the COPY command in COPY.</p>
+<h3 id="Using-SELECT"><a href="#Using-SELECT" class="headerlink" title="Using SELECT"></a>Using SELECT</h3><p>Querying a Table<br>To retrieve data from a table, the table is queried. An SQL SELECT statement is used to do this. The statement is divided into a select list (the part that lists the columns to be returned), a table list (the part that lists the tables from which to retrieve the data), and an optional qualification (the part that specifies any restrictions). For example, to retrieve all the rows of table weather, type:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> weather;</code></pre>
+
+<p>Here * is a shorthand for “all columns”. So the same result would be had with:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> city, temp_lo, temp_hi, prcp, <span class="hljs-built_in">date</span> <span class="hljs-keyword">FROM</span> weather;</code></pre>
+
+<p>You can write expressions, not just simple column references, in the select list. For example, you can do:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> city, (temp_hi+temp_lo)/<span class="hljs-number">2</span> <span class="hljs-keyword">AS</span> temp_avg, <span class="hljs-built_in">date</span> <span class="hljs-keyword">FROM</span> weather;</code></pre>
+
+<p>A query can be “qualified” by adding a WHERE clause that specifies which rows are wanted. The WHERE clause contains a Boolean (truth value) expression, and only rows for which the Boolean expression is true are returned. The usual Boolean operators (AND, OR, and NOT) are allowed in the qualification. For example, the following retrieves the weather of San Francisco on rainy days:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> weather
+    <span class="hljs-keyword">WHERE</span> city = <span class="hljs-string">&#x27;San Francisco&#x27;</span> <span class="hljs-keyword">AND</span> prcp &gt; <span class="hljs-number">0.0</span>;</code></pre>
+
+<p>You can request that the results of a query be returned in sorted order:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> weather
+    <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> city;</code></pre>
+
+<p>In this example, the sort order isn’t fully specified, and so you might get the San Francisco rows in either order. But you’d always get the results shown above if you do:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> weather
+    <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> city, temp_lo;</code></pre>
+
+<p>You can request that duplicate rows be removed from the result of a query:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> city
+    <span class="hljs-keyword">FROM</span> weather;</code></pre>
+
+<p>Here again, the result row ordering might vary. You can ensure consistent results by using DISTINCT and ORDER BY together:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> city
+    <span class="hljs-keyword">FROM</span> weather
+    <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> city;</code></pre>
+
+<h3 id="Joins-Between-Tables"><a href="#Joins-Between-Tables" class="headerlink" title="Joins Between Tables"></a>Joins Between Tables</h3><p>Thus far, our queries have only accessed one table at a time. Queries can access multiple tables at once, or access the same table in such a way that multiple rows of the table are being processed at the same time. A query that accesses multiple rows of the same or different tables at one time is called a join query. As an example, say you wish to list all the weather records together with the location of the associated city. To do that, we need to compare the city column of each row of the weather table with the name column of all rows in the cities table, and select the pairs of rows where these values match.<br>This would be accomplished by the following query:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> *
+    <span class="hljs-keyword">FROM</span> weather, cities
+    <span class="hljs-keyword">WHERE</span> city = <span class="hljs-keyword">name</span>;</code></pre>
+
+<p>Observe two things about the result set:</p>
+<p>There is no result row for the city of Hayward. This is because there is no matching entry in the cities table for Hayward, so the join ignores the unmatched rows in the weather table. We will see shortly how this can be fixed.</p>
+<p>There are two columns containing the city name. This is correct because the lists of columns from the weather and cities tables are concatenated. In practice this is undesirable, though, so you will probably want to list the output columns explicitly rather than using *:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> city, temp_lo, temp_hi, prcp, <span class="hljs-built_in">date</span>, location
+    <span class="hljs-keyword">FROM</span> weather, cities
+    <span class="hljs-keyword">WHERE</span> city = <span class="hljs-keyword">name</span>;
+Exercise: Attempt to determine the semantics of this query when the WHERE clause is omitted.</code></pre>
+
+<p>Since the columns all had different names, the parser automatically found which table they belong to. If there were duplicate column names in the two tables you’d need to qualify the column names to show which one you meant, as in:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> weather.city, weather.temp_lo, weather.temp_hi,
+       weather.prcp, weather.date, cities.location
+    <span class="hljs-keyword">FROM</span> weather, cities
+    <span class="hljs-keyword">WHERE</span> cities.name = weather.city;</code></pre>
+
+<p>It is widely considered good style to qualify all column names in a join query, so that the query won’t fail if a duplicate column name is later added to one of the tables.</p>
+<p>Join queries of the kind seen thus far can also be written in this alternative form:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> *
+    <span class="hljs-keyword">FROM</span> weather <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> cities <span class="hljs-keyword">ON</span> (weather.city = cities.name);</code></pre>
+
+<p>This syntax is not as commonly used as the one above, but we show it here to help you understand the following topics.</p>
+<p>Now we will figure out how we can get the Hayward records back in. What we want the query to do is to scan the weather table and for each row to find the matching cities row(s). If no matching row is found we want some “empty values” to be substituted for the cities table’s columns. This kind of query is called an outer join. (The joins we have seen so far are inner joins.) The command looks like this:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> *
+    <span class="hljs-keyword">FROM</span> weather <span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">OUTER</span> <span class="hljs-keyword">JOIN</span> cities <span class="hljs-keyword">ON</span> (weather.city = cities.name);</code></pre>
+
+<p>This query is called a left outer join because the table mentioned on the left of the join operator will have each of its rows in the output at least once, whereas the table on the right will only have those rows output that match some row of the left table. When outputting a left-table row for which there is no right-table match, empty (null) values are substituted for the right-table columns.</p>
+<p>Exercise: There are also right outer joins and full outer joins. Try to find out what those do.</p>
+<p>We can also join a table against itself. This is called a self join. As an example, suppose we wish to find all the weather records that are in the temperature range of other weather records. So we need to compare the temp_lo and temp_hi columns of each weather row to the temp_lo and temp_hi columns of all other weather rows. We can do this with the following query:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> W1.city, W1.temp_lo <span class="hljs-keyword">AS</span> <span class="hljs-keyword">low</span>, W1.temp_hi <span class="hljs-keyword">AS</span> <span class="hljs-keyword">high</span>,
+    W2.city, W2.temp_lo <span class="hljs-keyword">AS</span> <span class="hljs-keyword">low</span>, W2.temp_hi <span class="hljs-keyword">AS</span> <span class="hljs-keyword">high</span>
+    <span class="hljs-keyword">FROM</span> weather W1, weather W2
+    <span class="hljs-keyword">WHERE</span> W1.temp_lo &lt; W2.temp_lo
+    <span class="hljs-keyword">AND</span> W1.temp_hi &gt; W2.temp_hi;</code></pre>
+
+<p>Here we have relabeled the weather table as W1 and W2 to be able to distinguish the left and right side of the join. You can also use these kinds of aliases in other queries to save some typing, e.g.:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> *
+    <span class="hljs-keyword">FROM</span> weather w, cities c
+    <span class="hljs-keyword">WHERE</span> w.city = c.name;
+You will encounter this style of abbreviating quite frequently.</code></pre>
+
+<h3 id="Aggregate-Functions"><a href="#Aggregate-Functions" class="headerlink" title="Aggregate Functions"></a>Aggregate Functions</h3><p>Like most other relational database products, PostgreSQL supports aggregate functions. An aggregate function computes a single result from multiple input rows. For example, there are aggregates to compute the count, sum, avg (average), max (maximum) and min (minimum) over a set of rows.<br>As an example, we can find the highest low-temperature reading anywhere with:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">max</span>(temp_lo) <span class="hljs-keyword">FROM</span> weather;</code></pre>
+
+<p>If we wanted to know what city (or cities) that reading occurred in, we might try:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> city <span class="hljs-keyword">FROM</span> weather <span class="hljs-keyword">WHERE</span> temp_lo = <span class="hljs-keyword">max</span>(temp_lo);     WRONG</code></pre>
+
+<p>but this will not work since the aggregate max cannot be used in the WHERE clause. (This restriction exists because the WHERE clause determines which rows will be included in the aggregate calculation; so obviously it has to be evaluated before aggregate functions are computed.) However, as is often the case the query can be restated to accomplish the desired result, here by using a subquery:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> city <span class="hljs-keyword">FROM</span> weather
+    <span class="hljs-keyword">WHERE</span> temp_lo = (<span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">max</span>(temp_lo) <span class="hljs-keyword">FROM</span> weather);</code></pre>
+
+<p>This is OK because the subquery is an independent computation that computes its own aggregate separately from what is happening in the outer query.<br>Aggregates are also very useful in combination with GROUP BY clauses. For example, we can get the maximum low temperature observed in each city with:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> city, <span class="hljs-keyword">max</span>(temp_lo)
+    <span class="hljs-keyword">FROM</span> weather
+    <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> city;</code></pre>
+
+<p>which gives us one output row per city. Each aggregate result is computed over the table rows matching that city. We can filter these grouped rows using HAVING:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> city, <span class="hljs-keyword">max</span>(temp_lo)
+    <span class="hljs-keyword">FROM</span> weather
+    <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> city
+    <span class="hljs-keyword">HAVING</span> <span class="hljs-keyword">max</span>(temp_lo) &lt; <span class="hljs-number">40</span>;</code></pre>
+
+<p>which gives us the same results for only the cities that have all temp_lo values below 40. Finally, if we only care about cities whose names begin with “S”, we might do:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> city, <span class="hljs-keyword">max</span>(temp_lo)
+    <span class="hljs-keyword">FROM</span> weather
+    <span class="hljs-keyword">WHERE</span> city <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;S%&#x27;</span>(<span class="hljs-number">1</span>)
+    <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> city
+    <span class="hljs-keyword">HAVING</span> <span class="hljs-keyword">max</span>(temp_lo) &lt; <span class="hljs-number">40</span>;</code></pre>
+
+<p>It is important to understand the interaction between aggregates and SQL’s WHERE and HAVING clauses. The fundamental difference between WHERE and HAVING is this: WHERE selects input rows before groups and aggregates are computed (thus, it controls which rows go into the aggregate computation), whereas HAVING selects group rows after groups and aggregates are computed. Thus, the WHERE clause must not contain aggregate functions; it makes no sense to try to use an aggregate to determine which rows will be inputs to the aggregates. On the other hand, the HAVING clause always contains aggregate functions. (Strictly speaking, you are allowed to write a HAVING clause that doesn’t use aggregates, but it’s seldom useful. The same condition could be used more efficiently at the WHERE stage.)<br>In the previous example, we can apply the city name restriction in WHERE, since it needs no aggregate. This is more efficient than adding the restriction to HAVING, because we avoid doing the grouping and aggregate calculations for all rows that fail the WHERE check.</p>
+<h3 id="Updates"><a href="#Updates" class="headerlink" title="Updates"></a>Updates</h3><p>You can update existing rows using the UPDATE command. Suppose you discover the temperature readings are all off by 2 degrees after November 28. You can correct the data as follows:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">UPDATE</span> weather
+    <span class="hljs-keyword">SET</span> temp_hi = temp_hi - <span class="hljs-number">2</span>,  temp_lo = temp_lo - <span class="hljs-number">2</span>
+    <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">date</span> &gt; <span class="hljs-string">&#x27;1994-11-28&#x27;</span>;</code></pre>
+
+<p>Look at the new state of the data:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> weather;</code></pre>
+
+<h3 id="Deletions"><a href="#Deletions" class="headerlink" title="Deletions"></a>Deletions</h3><p>Rows can be removed from a table using the DELETE command. Suppose you are no longer interested in the weather of Hayward. Then you can do the following to delete those rows from the table:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">FROM</span> weather <span class="hljs-keyword">WHERE</span> city = <span class="hljs-string">&#x27;Hayward&#x27;</span>;</code></pre>
+
+<p>All weather records belonging to Hayward are removed.</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> weather;</code></pre>
+
+<p>One should be wary of statements of the form</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">FROM</span> tablename;</code></pre>
+
+<p>Without a qualification, DELETE will remove all rows from the given table, leaving it empty. The system will not request confirmation before doing this!</p>
+<h2 id="Creating-a-MIMIC-III-Database"><a href="#Creating-a-MIMIC-III-Database" class="headerlink" title="Creating a MIMIC III Database"></a>Creating a MIMIC III Database</h2><p>After installation refers to <a target="_blank" rel="noopener" href="https://www.postgresql.org/download">PostgreSQL download</a>, then create a database role “mimicuser” to access the data</p>
+<pre><code class="hljs bash">sudo -u postgres -i
+createuser -P -s -e -d mimicuser</code></pre>
+
+<p>Connect to the database with psql</p>
+<pre><code class="hljs bash">psql -U postgres -d postgres</code></pre>
+
+<p>Create an empty database containing a MIMIC-III schema whose database role is “mimicuser”</p>
+<pre><code class="hljs sql">=<span class="hljs-comment"># CREATE DATABASE mimic OWNER mimicuser;</span></code></pre>
+
+<p>Create a schema to hold the data</p>
+<pre><code class="hljs sql">=<span class="hljs-comment"># \c mimic;</span>
+=<span class="hljs-comment"># CREATE SCHEMA mimiciii;</span>
+=<span class="hljs-comment"># set search_path to mimiciii;</span></code></pre>
+
+<p>Note that after doing this, you have to type ‘set search_path to mimiciii;’ everytime you wanna connect to the database.</p>
+<p>Set the password for ‘postgres’ and ‘mimicuser’</p>
+<pre><code class="hljs sql">\password postgres
+\password mimicuser</code></pre>
+
+<p>Enter a password, to avoid memorization issues here I use ‘password’ as the password.<br>To allow password identification, we have to change the’hab_file’, use following command to get the file path:</p>
+<pre><code class="hljs sql">=<span class="hljs-comment"># show hba_file;</span>
+=<span class="hljs-comment"># show config_file;</span></code></pre>
+
+<p>In my system the path is /etc/postgresql/9.6/main/pg_hba.conf</p>
+<pre><code class="hljs bash">vim /etc/postgresql/9.6/main/pg_hba.conf</code></pre>
+
+<p>Change the local all all from peer to md5 to allow password identification for ‘mimicuser’.</p>
+<pre><code class="hljs bash">Database administrative login by Unix domain socket
+<span class="hljs-built_in">local</span>   all             postgres                                peer
+TYPE  DATABASE        USER            ADDRESS                 METHOD
+<span class="hljs-string">&quot;local&quot;</span> is <span class="hljs-keyword">for</span> Unix domain socket connections only
+<span class="hljs-built_in">local</span>   all             all                          <span class="hljs-string">&quot;peer&quot;</span> to <span class="hljs-string">&quot;md5&quot;</span>
+IPv4 <span class="hljs-built_in">local</span> connections:
+host    all             all             127.0.0.1/32            md5
+IPv6 <span class="hljs-built_in">local</span> connections:
+host    all             all             ::1/128                 md5</code></pre>
+
+<p>Restart PostgreSQL</p>
+<pre><code class="hljs bash">sudo service postgresql restart</code></pre>
+
+<p>After restart of the postgresql service, now I can use ‘mimicuser’ and its password to access the database.</p>
+<pre><code class="hljs bash">psql -U mimicuser -d mimic</code></pre>
+
+<p>Create a set of empty tables on a mimiciii schema, ready to populate with the data</p>
+<pre><code class="hljs bash">psql <span class="hljs-string">&#x27;dbname=mimic user=mimicuser options=--search_path=mimiciii&#x27;</span> -f postgres_create_tables.sql</code></pre>
+
+<p>Import the CSV data files into the empty tables</p>
+<pre><code class="hljs bash">psql <span class="hljs-string">&#x27;dbname=mimic user=mimicuser options=--search_path=mimiciii&#x27;</span> -f postgres_load_data.sql -v mimic_data_dir=<span class="hljs-string">&#x27;&lt;path_to_data&gt;&#x27;</span></code></pre>
+
+<p>Indexes provide additional structure for the database that can help to improve the speed of queries. The MIMIC code repository includes a script with a set of suggested indexes. As before, you can run this script from the command line to add indexes to improve performance</p>
+<pre><code class="hljs bash">psql <span class="hljs-string">&#x27;dbname=mimic user=mimicuser options=--search_path=mimiciii&#x27;</span> -f postgres_add_indexes.sql</code></pre>
+
+<p>Run checks, We have included a script which verifies all rows have been loaded in. Run those checks now</p>
+<pre><code class="hljs bash">psql <span class="hljs-string">&#x27;dbname=mimic user=mimicuser options=--search_path=mimiciii&#x27;</span> -f postgres_checks.sql</code></pre>
+
+<p>MIMIC-III is ready for analysis</p>
+<p>You should now have a working copy of MIMIC-III ready to query with the psql command line tool. First start the PSQL client from the command line:</p>
+<pre><code class="hljs bash">psql <span class="hljs-string">&#x27;dbname=mimic user=mimicuser options=--search_path=mimiciii&#x27;</span></code></pre>
+
+<p>Before going further, you should grant all privileges needed to the mimic user, then revoke the superuser privilege:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">grant</span> <span class="hljs-keyword">select</span> <span class="hljs-keyword">on</span> <span class="hljs-keyword">all</span> <span class="hljs-keyword">tables</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">schema</span> mimiciii <span class="hljs-keyword">to</span> mimicuser;
+<span class="hljs-keyword">grant</span> <span class="hljs-keyword">usage</span> <span class="hljs-keyword">on</span> <span class="hljs-keyword">schema</span> mimiciii <span class="hljs-keyword">to</span> mimicuser;
+<span class="hljs-keyword">grant</span> <span class="hljs-keyword">connect</span> <span class="hljs-keyword">on</span> <span class="hljs-keyword">database</span> mimic <span class="hljs-keyword">to</span> mimicuser;
+<span class="hljs-keyword">alter</span> <span class="hljs-keyword">user</span> mimicuser nosuperuser;</code></pre>
+
+<p>Now try, for example, counting the number of patients in the database:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-keyword">count</span>(subject_id)
+<span class="hljs-keyword">from</span> mimiciii.patients;</code></pre>
+
+<p>string above (–search_path=mimiciii), we can omit it in the query:</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-keyword">count</span>(subject_id)
+<span class="hljs-keyword">from</span> patients;</code></pre>
+
+<p>Install a graphical user interface</p>
+<p><a target="_blank" rel="noopener" href="https://www.pgadmin.org/">pgAdmin</a><br><a target="_blank" rel="noopener" href="https://www.navicat.com/">Navicat</a><br><a target="_blank" rel="noopener" href="https://www.jetbrains.com/datagrip/">DataGrip</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Databases/">Databases</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/PostgreSQL/">PostgreSQL</a>
+                    
+                      <a class="hover-with-bg" href="/tags/MIMICIII/">MIMICIII</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/01/17/Customize-the-GIT-for-Windows/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Customize the GIT for Windows</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2016/12/09/Ubuntu-16-04-LTS-Windows-10-dual-boot-time-zone-difference/">
+                        <span class="hidden-mobile">Ubuntu 16.04 LTS & Windows 10 dual boot time zone difference</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      © 2020
+      <i class="iconfont icon-love"></i>
+      Yaoxiang Li
+    </div>
+    <div>
+      <span id="timeDate">载入天数...</span>
+      <span id="times">载入时分秒...</span>
+      <script>
+      var now = new Date();
+      function createtime(){
+          var grt= new Date("11/27/2012 12:05:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24;
+          dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+          hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){
+              hnum = "0" + hnum;
+          }
+          minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes);
+          if(String(mnum).length ==1 ){
+                    mnum = "0" + mnum;
+          }
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds);
+          if(String(snum).length ==1 ){
+                    snum = "0" + snum;
+          }
+          document.getElementById("timeDate").innerHTML = "Running for&nbsp"+dnum+"&nbspdays";
+          document.getElementById("times").innerHTML = hnum + "&nbsphours&nbsp" + mnum + "&nbspmins&nbsp" + snum + "&nbspsecs";
+      }
+      setInterval("createtime()",250);
+      </script>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Some tips about PostgreSQL and MIMICIII database&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1212 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Learning never exhausts the mind.">
+  <meta name="author" content="Yaoxiang Li">
+  <meta name="keywords" content="">
+  <title>Git Tutorial - The Seventh Paradigm</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_6peoq002giu.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>The Seventh Paradigm</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2018-01-28 13:33" pubdate>
+      January 28, 2018 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      9.2k words
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      183
+       mins
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Git Tutorial</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h2 id="Mac-Linux-Setup"><a href="#Mac-Linux-Setup" class="headerlink" title="Mac/Linux Setup"></a>Mac/Linux Setup</h2><h3 id="Installing-Git"><a href="#Installing-Git" class="headerlink" title="Installing Git"></a>Installing Git</h3><p>Here is a general installation on Mac/Linux. If you are using Windows, then enjoy yourself.<br>Git is actually installed on MacOS, but we’ll be reinstalling it so that we’ll have the newest version:</p>
+<ul>
+<li>go to <a target="_blank" rel="noopener" href="https://git-scm.com/downloads">Git</a></li>
+<li>download the software for Mac</li>
+<li>install Git choosing all of the default options</li>
+</ul>
+<h3 id="First-Time-Git-Configuration"><a href="#First-Time-Git-Configuration" class="headerlink" title="First Time Git Configuration"></a>First Time Git Configuration</h3><p>Before you can start using Git, you need to configure it. Run each of the following lines on the command line to make sure everything is set up.</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># sets up Git with your name</span>
+git config --global user.name <span class="hljs-string">&quot;&lt;Your-Full-Name&gt;&quot;</span>
+
+<span class="hljs-comment"># sets up Git with your email</span>
+git config --global user.email <span class="hljs-string">&quot;&lt;your-email-address&gt;&quot;</span>
+
+<span class="hljs-comment"># makes sure that Git output is colored</span>
+git config --global color.ui auto
+
+<span class="hljs-comment"># displays the original state in a conflict</span>
+git config --global merge.conflictstyle diff3
+
+git config --list</code></pre>
+
+<h3 id="Git-amp-Code-Editor"><a href="#Git-amp-Code-Editor" class="headerlink" title="Git &amp; Code Editor"></a>Git &amp; Code Editor</h3><p>The last step of configuration is to get Git working with your code editor. Below are three of the most popular code editors.</p>
+<p>Atom Editor Setup</p>
+<pre><code class="hljs bash">git config --global core.editor <span class="hljs-string">&quot;atom --wait&quot;</span></code></pre>
+
+<p>Sublime Text Setup</p>
+<pre><code class="hljs bash">git config --global core.editor <span class="hljs-string">&quot;&#x27;/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl&#x27; -n -w&quot;</span></code></pre>
+
+<p>VSCode Setup</p>
+<pre><code class="hljs bash">git config --global core.editor <span class="hljs-string">&quot;code --wait&quot;</span></code></pre>
+
+<h2 id="Create-a-Git-Repo"><a href="#Create-a-Git-Repo" class="headerlink" title="Create a Git Repo"></a>Create a Git Repo</h2><h3 id="Create-a-Repo-from-Scratch"><a href="#Create-a-Repo-from-Scratch" class="headerlink" title="Create a Repo from Scratch"></a>Create a Repo from Scratch</h3><pre><code class="hljs bash">mkdir -p git-practice/new-git-project &amp;&amp; <span class="hljs-built_in">cd</span> <span class="hljs-variable">$_</span></code></pre>
+
+<p>Use <code>git init</code> to initialize a empty new empty Git repository.</p>
+<p>.Git Directory Contents</p>
+<p>Here’s a brief synopsis on each of the items in the .git directory:</p>
+<ul>
+<li>config file - where all project specific configuration settings are stored.</li>
+<li>description file - this file is only used by the GitWeb program, so we can ignore it</li>
+<li>hooks directory - this is where we could place client-side or server-side scripts that we can use to hook into Git’s different lifecycle events</li>
+<li>info directory - contains the global excludes file</li>
+<li>objects directory - this directory will store all of the commits we make</li>
+<li>refs directory - this directory holds pointers to commits (basically the “branches” and “tags”)</li>
+</ul>
+<h3 id="Clone-An-Existing-Repo"><a href="#Clone-An-Existing-Repo" class="headerlink" title="Clone An Existing Repo"></a>Clone An Existing Repo</h3><p>Clone from URL</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/udacity/course-git-blog-project</code></pre>
+
+<p>Clone with rename</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/udacity/course-git-blog-project blog-project</code></pre>
+
+<h2 id="Determine-A-Repo’s-Status"><a href="#Determine-A-Repo’s-Status" class="headerlink" title="Determine A Repo’s Status"></a>Determine A Repo’s Status</h2><pre><code class="hljs bash">git status
+
+On branch master
+Your branch is up-to-date with <span class="hljs-string">&#x27;origin/master&#x27;</span>.
+nothing to commit, working directory clean</code></pre>
+
+<ol>
+<li>On branch master – this tells us that Git is on the master branch.</li>
+<li>Your branch is up-to-date with ‘origin/master’. – Because git clone was used to copy this repository from another computer, this is telling us if our project is in sync with the one we copied from. We won’t be dealing with the project on the other computer, so this line can be ignored.</li>
+<li>nothing to commit, working directory clean – this is saying that there are no pending changes.</li>
+</ol>
+<h2 id="Git-Log-Command"><a href="#Git-Log-Command" class="headerlink" title="Git Log Command"></a>Git Log Command</h2><h3 id="Use-Git-Log"><a href="#Use-Git-Log" class="headerlink" title="Use Git Log"></a>Use Git Log</h3><pre><code class="hljs bash">git <span class="hljs-built_in">log</span></code></pre>
+
+<p>By default, this command displays:</p>
+<ul>
+<li>the SHA</li>
+<li>the author</li>
+<li>the date</li>
+<li>the message</li>
+</ul>
+<p>It will display the log in <code>less</code> mode:</p>
+<p>to scroll down, press</p>
+<ul>
+<li>j or ↓ to move down one line at a time</li>
+<li>d to move by half the page screen</li>
+<li>f to move by a whole page screen</li>
+</ul>
+<p>to scroll up, press</p>
+<ul>
+<li>k or ↑ to move up one line at a time</li>
+<li>u to move by half the page screen</li>
+<li>b to move by a whole page screen</li>
+</ul>
+<p>press q to quit out of the log (returns to the regular command prompt)</p>
+<ol>
+<li>Use git log to find the commit that has a SHA that starts with f9720a. Who made the commit?</li>
+<li>Use git log to find the commit with the SHA that starts with 8aa6668. What is the message for that commit?</li>
+<li>Use git log to find the commit with the SHA that starts with f9720a9. When was that commit made?</li>
+<li>Use git log to find the commit that has the message Set article timestamp color. Which commit belongs to that SHA? Provide the first 7 characters of the SHA.</li>
+</ol>
+<h3 id="Change-Git-Log-Displays"><a href="#Change-Git-Log-Displays" class="headerlink" title="Change Git Log Displays"></a>Change Git Log Displays</h3><ol>
+<li>the SHA - git log will display the complete SHA for every single commit. Each SHA is unique, so we don’t really need to see the entire SHA. We could get by perfectly fine with knowing just the first 6-8 characters. Wouldn’t it be great if we could save some space and show just the first 5 or so characters of the SHA?</li>
+<li>the author - the git log output displays the commit author for every single commit! It could be different for other repositories that have multiple people collaborating together, but for this one, there’s only one person making all of the commits, so the commit author will be identical for all of them. Do we need to see the author for each one? What if we wanted to hide that information?</li>
+<li>the date - By default, git log will display the date for each commit. But do we really care about the commit’s date? Knowing the date might be important occasionally, but typically knowing the date isn’t vitally important and can be ignored in a lot of cases. Is there a way we could hide that to save space?</li>
+<li>the commit message - this is one of the most important parts of a commit message…we usually always want to see this</li>
+</ol>
+<p>What could we do here to not waste a lot of space and make the output smaller? We can use a flag.</p>
+<p>The git log command has a flag that can be used to alter how it displays the repository’s information. That flag is –oneline:</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --oneline</code></pre>
+
+<h3 id="Viewing-Modified-Files"><a href="#Viewing-Modified-Files" class="headerlink" title="Viewing Modified Files"></a>Viewing Modified Files</h3><p>The git log command has a flag that can be used to display the files that have been changed in the commit, as well as the number of lines that have been added or deleted. The flag is –stat (“stat” is short for “statistics”):</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --<span class="hljs-built_in">stat</span></code></pre>
+
+<ol>
+<li>how many files were modified in the commit with the SHA 6f04ddd?</li>
+<li>How many files were modified in the commit with the SHA 8d3ea36?</li>
+<li>How many lines of code were deleted in index.html in the commit with the SHA 8d3ea36?</li>
+</ol>
+<h3 id="Viewing-File-Changes"><a href="#Viewing-File-Changes" class="headerlink" title="Viewing File Changes"></a>Viewing File Changes</h3><p>The git log command has a flag that can be used to display the actual changes made to a file. The flag is –patch which can be shortened to just -p:</p>
+<p>This command adds the following to the default output:</p>
+<ul>
+<li>displays the files that have been modified</li>
+<li>displays the location of the lines that have been added/removed</li>
+<li>displays the actual changes that have been made</li>
+</ul>
+<pre><code class="hljs bash">git <span class="hljs-built_in">log</span> -p</code></pre>
+
+<ol>
+<li>look at the commit with the SHA 50d835d. What line number in app.css should you start looking at to see what has been changed?</li>
+<li>Using git log and any of its flags, what code was added in by commit 4a60beb?</li>
+<li>git log –stat and git log -p are both really helpful commands. Wouldn’t it be great if we could have both of their output at the same time?</li>
+<li>What does the -w flag do to the patch information?</li>
+</ol>
+<h3 id="Viewing-A-Specific-Commit"><a href="#Viewing-A-Specific-Commit" class="headerlink" title="Viewing A Specific Commit"></a>Viewing A Specific Commit</h3><p>You must be tired with the scrolling of the previous practices, how about supply the SHA of a commit as the final argument for all of these commands?</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">log</span> -p fdf5493</code></pre>
+
+<p>It still show other commits when scrolling.</p>
+<p>The other command that shows a specific commit is git show:</p>
+<pre><code class="hljs bash">git show fdf5493</code></pre>
+
+<p>The git show command will show only one commit.<br>By default, git show displays:</p>
+<ul>
+<li>the commit</li>
+<li>the author</li>
+<li>the date</li>
+<li>the commit message</li>
+<li>the patch information</li>
+</ul>
+<ol>
+<li>How many rulesets are added to the CSS by commit 8d3ea36?</li>
+<li>There’s a commit with the message “Convert social links from text to images”. How many files were changed by this commit?</li>
+<li>Look at commit fdf5493. What’s the first HTML heading element that’s added by this commit?</li>
+</ol>
+<h2 id="Add-Commits"><a href="#Add-Commits" class="headerlink" title="Add Commits"></a>Add Commits</h2><h3 id="Git-Add"><a href="#Git-Add" class="headerlink" title="Git Add"></a>Git Add</h3><p>Make a <code>new-git-project</code> directory, and <code>cd</code> into it, then <code>git init</code> it.</p>
+<p>First, create a file named <code>index.html</code>, and fill it with some starter code:</p>
+<pre><code class="hljs html"><span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Blog Project<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;description&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;css/app.css&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;js/app.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+
+<p>Things to note, the code references a CSS file and a JavaScript file.</p>
+<p>Now create the CSS and JavaScript files. You can leave both of these files empty. We’ll add content to them in a bit.</p>
+<p>We just made a number of changes to the repository by adding files and content. It’s time to do a quick check-in with Git:</p>
+<pre><code class="hljs bash">git status</code></pre>
+
+<p>The Git noticed that there are some changes in the repository, so let’s stage those files.</p>
+<pre><code class="hljs bash">$ git add index.html css/app.css js/app.js
+<span class="hljs-comment"># Same as</span>
+$ git add .</code></pre>
+
+<p>When you use:</p>
+<pre><code class="hljs bash">git status</code></pre>
+
+<p>You can find that:</p>
+<pre><code class="hljs bash">use <span class="hljs-string">&quot;git rm --cached &lt;file&gt;...&quot;</span> to unstage</code></pre>
+
+<h3 id="Git-Commit"><a href="#Git-Commit" class="headerlink" title="Git Commit"></a>Git Commit</h3><pre><code class="hljs bash"><span class="hljs-comment"># check your default commit editor</span>
+git config --global core.editor
+git commit
+<span class="hljs-comment"># Or just with -m flag</span>
+git commit -m <span class="hljs-string">&quot;Initial commit&quot;</span></code></pre>
+
+<p>Now add this just inside the body tag in index.html:</p>
+<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">header</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Expedition<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span></code></pre>
+
+<pre><code class="hljs bash">git status
+git add .
+git commit</code></pre>
+
+<h3 id="How-to-write-the-commit-message"><a href="#How-to-write-the-commit-message" class="headerlink" title="How to write the commit message"></a>How to write the commit message</h3><p>The goal is that each commit has a single focus. Each commit should record a single-unit change. Now this can be a bit subjective (which is totally fine), but each commit should make a change to just one aspect of the project.</p>
+<p>Now this isn’t limiting the number of lines of code that are added/removed or the number of files that are added/removed/modified. Let’s say you want to change your sidebar to add a new image. You’ll probably:</p>
+<ul>
+<li>add a new image to the project files</li>
+<li>alter the HTML</li>
+<li>add/modify CSS to incorporate the new image</li>
+</ul>
+<p>A commit that records all of these changes would be totally fine!</p>
+<p>Conversely, a commit shouldn’t include unrelated changes - changes to the sidebar and rewording content in the footer. These two aren’t related to each other and shouldn’t be included in the same commit. Work on one change first, commit that, and then change the second one. That way, if it turns out that one change had a bug and you have to undo it, you don’t have to undo the other change too.</p>
+<p>Do</p>
+<ul>
+<li>do keep the message short (less than 60-ish characters)</li>
+<li>do explain what the commit does (not how or why!)</li>
+</ul>
+<p>Do not</p>
+<ul>
+<li>do not explain why the changes are made (more on this below)</li>
+<li>do not explain how the changes are made (that’s what git log -p is for!)</li>
+<li>do not use the word “and”. If you have to use “and”, your commit message is probably doing too many changes - break the changes into separate commits. e.g. “make the background color pink and increase the size of the sidebar” The best way that I’ve found to come up with a commit message is to finish this phrase, “This commit will…”. However, you finish that phrase, use that as your commit message.</li>
+</ul>
+<h3 id="Git-Diff"><a href="#Git-Diff" class="headerlink" title="Git Diff"></a>Git Diff</h3><p>The <code>git diff</code> command can be used to see changes that have been made but haven’t been committed, yet.</p>
+<h3 id="Having-Git-Ignore-Files"><a href="#Having-Git-Ignore-Files" class="headerlink" title="Having Git Ignore Files"></a>Having Git Ignore Files</h3><p>The <code>.gitignore</code> file is used to tell Git about the files that Git should not track. This file should be placed in the same directory that the <code>.git</code> directory is in.</p>
+<p><a target="_blank" rel="noopener" href="https://www.gitignore.io/">gitignore.io</a> is a good tool to generate <code>.gitignore</code> file.</p>
+<h2 id="Tagging-Branching-amd-Merging"><a href="#Tagging-Branching-amd-Merging" class="headerlink" title="Tagging, Branching, amd Merging"></a>Tagging, Branching, amd Merging</h2><h3 id="Tagging"><a href="#Tagging" class="headerlink" title="Tagging"></a>Tagging</h3><p>The command we’ll be using to interact with the repository’s tags is the git tag command:</p>
+<pre><code class="hljs bash">git tag -a v1.0</code></pre>
+
+<pre><code class="hljs bash">This will open your code editor and <span class="hljs-built_in">wait</span> <span class="hljs-keyword">for</span> you to supply a message <span class="hljs-keyword">for</span> the tag. How about the message <span class="hljs-string">&quot;Ready for content&quot;</span>?
+
+CAREFUL: In the <span class="hljs-built_in">command</span> above (git tag -a v1.0) the -a flag is used. This flag tells Git to create an annotated flag. If you don<span class="hljs-string">&#x27;t provide the flag (i.e. git tag v1.0) then it&#x27;</span>ll create what<span class="hljs-string">&#x27;s called a lightweight tag.</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">Annotated tags are recommended because they include a lot of extra information such as:</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">the person who made the tag</span>
+<span class="hljs-string">the date the tag was made</span>
+<span class="hljs-string">a message for the tag</span>
+<span class="hljs-string">Because of this, you should always use annotated tags.</span></code></pre>
+
+<p>After saving and quitting the editor, nothing is displayed on the command line. So how do we know that a tag was actually added to the project? If you type out just git tag, it will display all tags that are in the repository.</p>
+<h3 id="Branching"><a href="#Branching" class="headerlink" title="Branching"></a>Branching</h3><p>The git branch command is used to interact with Git’s branches:</p>
+<pre><code class="hljs bash">git branch</code></pre>
+
+<p>It can be used to:</p>
+<ul>
+<li>list all branch names in the repository</li>
+<li>create new branches</li>
+<li>delete branches</li>
+</ul>
+<h3 id="Create-A-Branch"><a href="#Create-A-Branch" class="headerlink" title="Create A Branch"></a>Create A Branch</h3><p>To create a branch, all you have to do is use git branch and provide it the name of the branch you want it to create. So if you want a branch called “sidebar”, you’d run this command:</p>
+<pre><code class="hljs bash">git branch sidebar</code></pre>
+
+<h3 id="The-git-checkout-Command"><a href="#The-git-checkout-Command" class="headerlink" title="The git checkout Command"></a>The git checkout Command</h3><p>Remember that when a commit is made that it will be added to the current branch. So even though we created the new sidebar, no new commits will be added to it since we haven’t switched to it, yet. If we made a commit right now, that commit would be added to the master branch, not the sidebar branch. We’ve already seen this in the demo, but to switch between branches, we need to use Git’s checkout command.</p>
+<pre><code class="hljs bash">git checkout sidebar</code></pre>
+
+<p>It’s important to understand how this command works. Running this command will:</p>
+<ul>
+<li>remove all files and directories from the Working Directory that Git is tracking (files that Git tracks are stored in the repository, so nothing is lost)</li>
+<li>go into the repository and pull out all of the files and directories of the commit that the branch points to</li>
+</ul>
+<h3 id="Branches-In-The-Log"><a href="#Branches-In-The-Log" class="headerlink" title="Branches In The Log"></a>Branches In The Log</h3><p>The branch information in the command prompt is helpful, but the clearest way to see it is by looking at the output of git log. But just like we had to use the –decorate flag to display Git tags, we need it to display branches.</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --oneline --decorate</code></pre>
+
+<h3 id="Delete-A-Branch"><a href="#Delete-A-Branch" class="headerlink" title="Delete A Branch"></a>Delete A Branch</h3><p>A branch is used to do development or make a fix to the project that won’t affect the project (since the changes are made on a branch). Once you make the change on the branch, you can combine that branch into the master branch (this “combining of branches” is called “merging” and we’ll look at it shortly).</p>
+<p>Now after a branch’s changes have been merged, you probably won’t need the branch anymore. If you want to delete the branch, you’d use the -d flag. The command below includes the -d flag which tells Git to delete the provided branch (in this case, the “sidebar” branch).</p>
+<pre><code class="hljs bash">git branch -d sidebar</code></pre>
+
+<p>One thing to note is that you can’t delete a branch that you’re currently on. So to delete the sidebar branch, you’d have to switch to either the master branch or create and switch to a new branch.</p>
+<p>Deleting something can be quite nerve-wracking. Don’t worry, though. Git won’t let you delete a branch if it has commits on it that aren’t on any other branch (meaning the commits are unique to the branch that’s about to be deleted). If you created the sidebar branch, added commits to it, and then tried to delete it with the git branch -d sidebar, Git wouldn’t let you delete the branch because you can’t delete a branch that you’re currently on. If you switched to the master branch and tried to delete the sidebar branch, Git also wouldn’t let you do that because those new commits on the sidebar branch would be lost! To force deletion, you need to use a capital D flag - git branch -D sidebar.</p>
+<h3 id="Git-Branch-Recap"><a href="#Git-Branch-Recap" class="headerlink" title="Git Branch Recap"></a>Git Branch Recap</h3><p>To recap, the git branch command is used to manage branches in Git:</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># to list all branches</span>
+git branch
+
+<span class="hljs-comment"># to create a new &quot;footer-fix&quot; branch</span>
+git branch footer-fix
+
+<span class="hljs-comment"># to delete the &quot;footer-fix&quot; branch</span>
+git branch -d footer-fix</code></pre>
+
+<h2 id="Branching-Effectively"><a href="#Branching-Effectively" class="headerlink" title="Branching Effectively"></a>Branching Effectively</h2><p>First, make sure we’re on the same page and have the same starter code. We’re going to be working in the new-git-project project. The project has the following files:</p>
+<ul>
+<li>index.html</li>
+<li>css/app.css (empty)</li>
+<li>js/app.js (empty)</li>
+</ul>
+<p>The CSS and JavaScript files are empty. Make sure the index file has the following content:</p>
+<pre><code class="hljs html"><span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Blog Project<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;description&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;css/app.css&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">header</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Expedition<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">main</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;/<span class="hljs-name">main</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">footer</span>&gt;</span>
+        Made with ♥ @ Git Practice
+    <span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;js/app.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+
+<h3 id="The-Game-Plan"><a href="#The-Game-Plan" class="headerlink" title="The Game Plan"></a>The Game Plan</h3><p>Right now we have all of our code on the master branch (which is the default branch). We’re about to work with branches, by:</p>
+<ul>
+<li>adding content to them</li>
+<li>creating new branches</li>
+<li>switching back and forth between them</li>
+</ul>
+<p>Let’s use branches to make the following changes:</p>
+<ol>
+<li>on the master branch - add a default color to the page</li>
+<li>create a sidebar branch - create a sidebar for the page</li>
+<li>on the master branch - change the heading of the page</li>
+<li>on the sidebar branch - add more content to the sidebar</li>
+<li>create a footer branch - add social links to the footer</li>
+</ol>
+<h3 id="Change-1-Add-Page-Color"><a href="#Change-1-Add-Page-Color" class="headerlink" title="Change 1 - Add Page Color"></a>Change 1 - Add Page Color</h3><p>Make sure you’re on the master branch and add the following content to css/app.css:</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">body</span> &#123;
+    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#00cae4</span>;
+&#125;</code></pre>
+
+<p>Save the file. Then add the file to the staging index and commit it to the repository.</p>
+<h3 id="Change-2-Add-Sidebar"><a href="#Change-2-Add-Sidebar" class="headerlink" title="Change 2 - Add Sidebar"></a>Change 2 - Add Sidebar</h3><p>Let’s add a sidebar to the page. But let’s say that we’re not really sure if we like the new background color. So we’ll place the sidebar branch on the commit before the one that sets the page’s color. Your SHAs will be different, but, for me, the commit that’s before the one that adds the color has a SHA of 5bfe5e7. So adding the branch to that commit would look like:</p>
+<pre><code class="hljs bash">git branch sidebar 5bfe5e7</code></pre>
+
+<p>Now use the git checkout command to switch to the new sidebar branch.<br>Running a git log –oneline –decorate shows sidebar.</p>
+<p>Did you notice that the master branch does not display in the output? Where did it go!?! Is it lost? Don’t worry, it’s still there, we’ll see how to get it to display in just a second.</p>
+<p>But first, in your code editor, switch to the app.css file. Notice that it does not have the CSS we previously entered! Because of this, if you load the project up in the browser, the page won’t have a colored background. This makes sense since the CSS file is empty, but do you know why?</p>
+<p>Create a sidebar by adding the following <aside> code to the HTML file:</p>
+<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">main</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;/<span class="hljs-name">main</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-comment">&lt;!-- start of new content --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">aside</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>About Me<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, debitis earum molestias veniam suscipit aliquam totam exercitationem tempore neque vitae. Minima, corporis pariatur facere at quo porro beatae similique! Odit.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">aside</span>&gt;</span>
+<span class="hljs-comment">&lt;!-- end of new content --&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">footer</span>&gt;</span>
+    Made with ♥ @ Git Practice
+<span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span></code></pre>
+<p>I added my <aside> content next to the <main> element as a fellow child of the <div class="container"> element.</p>
+<p>Feel free to add any content inside the <aside> element!</p>
+<p>Don’t Change the CSS</p>
+<p>We’ll change it later, but if you make a change right now, we’ll end up having what’s known as a “merge conflict”. We’ll manually cause a merge conflict in a bit, but we don’t want to have one right now, so just don’t make any changes to the CSS file, yet.</p>
+<h3 id="Change-3-Change-Heading-On-Master"><a href="#Change-3-Change-Heading-On-Master" class="headerlink" title="Change 3 - Change Heading On Master"></a>Change 3 - Change Heading On Master</h3><p>Let’s switch back to the master branch and update the page heading.</p>
+<p>Use the git checkout command to switch back to the master branch. (Notice that the HTML for the new sidebar is no longer there(!) because all that code is stored safely on the sidebar branch.)</p>
+<p>Now change the <code>&lt;h1&gt;</code> heading of the page from “Expedition” to something else. How about something exciting like the word “Adventure”!?!</p>
+<p>How do you have Git show you the changes you’ve saved, but not yet committed?</p>
+<pre><code class="hljs bash">git diff</code></pre>
+
+<p>Now it’s time to save the index.html file and make a commit to add this change to the repository. (I used the commit message “Improve site heading for SEO”, but see if you can think of a better one)</p>
+<h3 id="Change-4-Add-More-Content-To-Sidebar"><a href="#Change-4-Add-More-Content-To-Sidebar" class="headerlink" title="Change 4 - Add More Content To Sidebar"></a>Change 4 - Add More Content To Sidebar</h3><p>Switch back to the sidebar branch (notice, again, that content we’ve added to the master branch isn’t visible on the sidebar branch).</p>
+<p>Now just add some content inside the <aside> element. Add something about yourself - your favorite movie or book (my favorite is LOTR!). Anything will work, you just need to add some content.</p>
+<p>Again, make sure that you do not make changes to the CSS file.</p>
+<p>Now save the index.html file and make a commit.</p>
+<h3 id="Change-5-Add-Social-Links-To-Footer"><a href="#Change-5-Add-Social-Links-To-Footer" class="headerlink" title="Change 5 - Add Social Links To Footer"></a>Change 5 - Add Social Links To Footer</h3><p>We’ve made a number of changes, and we’re about to make our last one. Let’s add some social icons to the page’s footer. For grins and giggles, let’s make this change on a new footer branch that’s based off the master branch. So we need to create a new footer branch, first.</p>
+<p>Switch and Create Branch In One Command</p>
+<p>The way we currently work with branches is to create a branch with the git branch command and then switch to that newly created branch with the git checkout command.</p>
+<p>But did you know that the git checkout command can actually create a new branch, too? If you provide the -b flag, you can create a branch and switch to it all in one command.</p>
+<pre><code class="hljs bash">git checkout -b richards-branch-for-awesome-changes</code></pre>
+
+<p>Let’s use this new feature of the git checkout command to create our new footer branch and have this footer branch start at the same location as the master branch:</p>
+<pre><code class="hljs bash">git checkout -b footer master</code></pre>
+
+<p>Add Social Links</p>
+<p>Now that we’re on a new branch, let’s add some social links to the page’s footer:</p>
+<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">footer</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- start of new content --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;visuallyhidden&quot;</span>&gt;</span>Social Links<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;social-link&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://twitter.com/udacity&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;img/social-twitter.png&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Twitter&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;social-link&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://www.instagram.com/udacity/&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;img/social-instagram.png&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Instagram&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;social-link&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://plus.google.com/+Udacity&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;img/social-google.png&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Google Plus&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- end of new content --&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span></code></pre>
+
+<h3 id="See-All-Branches-At-Once"><a href="#See-All-Branches-At-Once" class="headerlink" title="See All Branches At Once"></a>See All Branches At Once</h3><p>We’ve made it to the end of all the changes we needed to make! Awesome job!</p>
+<p>Now we have multiple sets of changes on three different branches. We can’t see other branches unless in the <code>git log</code> output unless we switch to a branch. Wouldn’t it be nice if we could see all branches at once in the <code>git log</code> output.</p>
+<p>As you’ve hopefully learned by now, the <code>git log</code> command is pretty powerful and can show us this information. We’ll use the new <code>--graph</code> and <code>--all</code> flags:</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --oneline --decorate --graph --all</code></pre>
+
+<p>The <code>--graph</code> flag adds the bullets and lines to the leftmost part of the output. This shows the actual branching that’s happening. The <code>--all</code> flag is what displays all of the branches in the repository.</p>
+<p>Running this command will show all branches and commits in the repository:</p>
+<h3 id="Merging"><a href="#Merging" class="headerlink" title="Merging"></a>Merging</h3><p>Remember that the purpose of a topic branch (like sidebar) is that it lets you make changes that do not affect the master branch. Once you make changes on the topic branch, you can either decide that you don’t like the changes on the branch and you can just delete that branch, or you can decide that you want to keep the changes on the topic branch and combine those changes in with those on another branch.</p>
+<p>Combining branches together is called merging.</p>
+<p>Git can automatically merge the changes on different branches together. This branching and merging ability is what makes Git incredibly powerful! You can make small or extensive changes on branches, and then just use Git to combine those changes together.</p>
+<p>It’s very important to know which branch you’re on when you’re about to merge branches together. Remember that making a merge makes a commit.</p>
+<p>As of right now, we do not know how to undo changes. but if you make a merge on the wrong branch, use this command to undo the merge:</p>
+<pre><code class="hljs bash">git reset --hard HEAD^
+(Make sure to include the ^ character! It<span class="hljs-string">&#x27;s a known as a &quot;Relative Commit Reference&quot; and indicates &quot;the parent commit&quot;.)</span></code></pre>
+
+<h3 id="The-Merge-Command"><a href="#The-Merge-Command" class="headerlink" title="The Merge Command"></a>The Merge Command</h3><p>The git merge command is used to combine Git branches:</p>
+<pre><code class="hljs bash">git merge &lt;name-of-branch-to-merge-in&gt;</code></pre>
+
+<p>When a merge happens, Git will:</p>
+<ul>
+<li>look at the branches that it’s going to merge</li>
+<li>look back along the branch’s history to find a single commit that both branches have in their commit history</li>
+<li>combine the lines of code that were changed on the separate branches together</li>
+<li>makes a commit to record the merge</li>
+</ul>
+<h3 id="Fast-forward-Merge"><a href="#Fast-forward-Merge" class="headerlink" title="Fast-forward Merge"></a>Fast-forward Merge</h3><p>In our project, I’ve checked out the master branch and I want it to have the changes that are on the footer branch. If I wanted to verbalize this, I could say this is - “I want to merge in the footer branch”. That “merge in” is important; when a merge is performed, the other branch’s changes are brought into the branch that’s currently checked out.</p>
+<p>Let me stress that again - When we merge, we’re merging some other branch into the current (checked-out) branch. We’re not merging two branches into a new branch. We’re not merging the current branch into the other branch.</p>
+<p>Now, since footer is directly ahead of master, this merge is one of the easiest merges to do. Merging footer into master will cause a Fast-forward merge. A Fast-forward merge will just move the currently checked out branch forward until it points to the same commit that the other branch (in this case, footer) is pointing to.</p>
+<p>To merge in the footer branch, run:</p>
+<pre><code class="hljs bash">git merge footer</code></pre>
+
+<h3 id="Perform-A-Regular-Merge"><a href="#Perform-A-Regular-Merge" class="headerlink" title="Perform A Regular Merge"></a>Perform A Regular Merge</h3><p>Let’s do the more common kind of merge where two divergent branches are combined. You’ll be surprised that to merge in a divergent branch like sidebar is actually no different!</p>
+<p>To merge in the sidebar branch, make sure you’re on the master branch and run:</p>
+<pre><code class="hljs bash">git merge sidebar</code></pre>
+
+<p>Because this combines two divergent branches, a commit is going to be made. And when a commit is made, a commit message needs to be supplied. Since this is a merge commit a default message is already supplied. You can change the message if you want, but it’s common practice to use the default merge commit message. So when your code editor opens with the message, just close it again and accept that commit message.</p>
+<p>The merges we just did were able to merge successfully. Git is able to intelligently combine lots of work on different branches. However, there are times when it can’t combine branches together. When a merge is performed and fails, that is called a merge conflict.</p>
+<h3 id="Merge-Conflicts"><a href="#Merge-Conflicts" class="headerlink" title="Merge Conflicts"></a>Merge Conflicts</h3><p>Sometimes Merges Fail<br>Most of the time Git will be able to merge branches together without any problem. However, there are instances when a merge cannot be fully performed automatically. When a merge fails, it’s called a merge conflict.</p>
+<p>If a merge conflict does occur, Git will try to combine as much as it can, but then it will leave special markers (e.g. &gt;&gt;&gt; and &lt;&lt;&lt;) that tell you where you (yep, you the programmer!) needs to manually fix.</p>
+<p>What Causes A Merge Conflict</p>
+<p>As you’ve learned, Git tracks lines in files. A merge conflict will happen when the exact same line(s) are changed in separate branches. For example, if you’re on a alternate-sidebar-style branch and change the sidebar’s heading to “About Me” but then on a different branch and change the sidebar’s heading to “Information About Me”, which heading should Git choose? You’ve changed the heading on both branches, so there’s no way Git will know which one you actually want to keep. And it sure isn’t going to just randomly pick for you!</p>
+<p>Let’s force a merge conflict so we can learn to resolve it. Trust me, it’s simple once you get the hang of it! Remember that a merge conflict occurs when Git isn’t sure which line(s) you want to use from the branches that are being merged. So we need to edit the same line on two different branches…and then try to merge them.</p>
+<p>Forcing A Merge Conflict!</p>
+<p>Remember that a merge conflict occurs when the exact same line(s) are changed in separate branches. Let’s alter the page’s heading on two different branches. So Let’s:</p>
+<ul>
+<li>change the heading on the master branch</li>
+<li>create a heading-update branch that’s located on the commit right before the recently modified master branch</li>
+<li>change the same heading</li>
+<li>switch back to the master branch</li>
+<li>merge in the heading-update branch</li>
+</ul>
+<p>Change Heading On Branch 1<br>Since the master branch is just a regular ol’ branch like all the rest, let’s just alter the heading while we’re on the master branch. So change the <code>&lt;h1&gt;</code> heading from whatever you have it to something else. For me, the heading is currently “Adventure” on line 13, and I’m changing it to “Quest”.</p>
+<p>Once you’ve made the change, save the file and commit it to the repository.</p>
+<p>Change Heading On Branch 2<br>Now we need to create a different branch and update the heading on that branch.</p>
+<p>Now this is important, we need to create a branch that’s not branching from the master branch. If we make a change that branches off of the master branch, then that change will be “ahead” of this one and Git will just use that change instead of the one we just made on master. So we need to put the branch “in the past”.</p>
+<p>Let’s just create a branch that’s on the commit right before the most recent one. So use Git log to get the previous commit’s SHA and create a branch on that commit.</p>
+<p>Ok, now that we’ve got our branch created, we just need to update the heading, again. Now make sure you change the exact same line that you changed on the master branch. I’m changing “Adventure” on line 13 to “Crusade”.</p>
+<p>Then save the file and commit it to the repository.</p>
+<p>Make sure you’re on the master branch (we could really do this on either branch, but I just have a habit of keeping the master branch the main one that other topic branches get merged into) and merge in the heading-update branch:</p>
+<pre><code class="hljs bash">git merge heading-update</code></pre>
+
+<p>Notice that right after the git merge heading-update command, it tries merging the file that was changed on both branches (index.html), but that there was a conflict. Also, notice that it tells you what happened - “Automatic merge failed; fix conflicts and then commit the result”.</p>
+<p>Remember our good friend git status? Well he’ll come in really handy when working with merge conflicts.</p>
+<p>The git status output tells us to that the merge conflict is inside index.html. So check out that file in your code editor!</p>
+<p>Resolving A Merge Conflict<br>Git is using the merge conflict indicators to show you what lines caused the merge conflict on the two different branches as well as what the original line used to have. So to resolve a merge conflict, you need to:</p>
+<p>choose which line(s) to keep<br>remove all lines with indicators</p>
+<h2 id="Undoing-Changes"><a href="#Undoing-Changes" class="headerlink" title="Undoing Changes"></a>Undoing Changes</h2><h3 id="Modifying-The-Last-Commit"><a href="#Modifying-The-Last-Commit" class="headerlink" title="Modifying The Last Commit"></a>Modifying The Last Commit</h3><p>You’ve already made plenty of commits with the git commit command. Now with the –amend flag, you can alter the most-recent commit.</p>
+<p>If your Working Directory is clean (meaning there aren’t any uncommitted changes in the repository), then running git commit –amend will let you provide a new commit message. Your code editor will open up and display the original commit message. Just fix a misspelling or completely reword it! Then save it and close the editor to lock in the new commit message.</p>
+<p>Add Forgotten Files To Commit</p>
+<p>Alternatively, <code>git commit --amend</code> will let you include files (or changes to files) you might’ve forgotten to include. Let’s say you’ve updated the color of all navigation links across your entire website. You committed that change and thought you were done. But then you discovered that a special nav link buried deep on a page doesn’t have the new color. You could just make a new commit that updates the color for that one link, but that would have two back-to-back commits that do practically the exact same thing (change link colors).</p>
+<p>Instead, you can amend the last commit (the one that updated the color of all of the other links) to include this forgotten one. To do get the forgotten link included, just:</p>
+<ul>
+<li>edit the file(s)</li>
+<li>save the file(s)</li>
+<li>stage the file(s)</li>
+<li>and run <code>git commit --amend</code></li>
+</ul>
+<p>So you’d make changes to the necessary CSS and/or HTML files to get the forgotten link styled correctly, then you’d save all of the files that were modified, then you’d use <code>git add</code> to stage all of the modified files (just as if you were going to make a new commit!), but then you’d run <code>git commit --amend</code> to update the most-recent commit instead of creating a new one.</p>
+<h3 id="Reverting-A-Commit"><a href="#Reverting-A-Commit" class="headerlink" title="Reverting A Commit"></a>Reverting A Commit</h3><p>When you tell Git to revert a specific commit, Git takes the changes that were made in commit and does the exact opposite of them. Let’s break that down a bit. If a character is added in commit A, if Git reverts commit A, then Git will make a new commit where that character is deleted. It also works the other way where if a character/line is removed, then reverting that commit will add that content back!</p>
+<p>We ended the previous lesson with a merge conflict and resolved that conflict by setting the heading to Adventurous Quest. Let’s say that there’s a commit in your repository that changes the heading now to Quests &amp; Crusades.</p>
+<p>Now that I’ve made a commit with some changes, I can revert it with the git revert command</p>
+<pre><code class="hljs bash">git revert &lt;SHA-of-commit-to-revert&gt;</code></pre>
+
+<p>Since the SHA of the most-recent commit is <code>db7e87a</code>, to revert it: I’ll just run <code>git revert db7e87a</code> (this will pop open my code editor to edit/accept the provided commit message)</p>
+<h3 id="Resetting-Commits"><a href="#Resetting-Commits" class="headerlink" title="Resetting Commits"></a>Resetting Commits</h3><p>At first glance, resetting might seem coincidentally close to reverting, but they are actually quite different. Reverting creates a new commit that reverts or undos a previous commit. Resetting, on the other hand, erases commits!</p>
+<p>You’ve got to be careful with Git’s resetting capabilities. This is one of the few commands that lets you erase commits from the repository. If a commit is no longer in the repository, then its content is gone.</p>
+<p>To alleviate the stress a bit, Git does keep track of everything for about 30 days before it completely erases anything. To access this content, you’ll need to use the <code>git reflog</code> command.</p>
+<h2 id="Working-With-Remotes"><a href="#Working-With-Remotes" class="headerlink" title="Working With Remotes"></a>Working With Remotes</h2><h3 id="Add-A-Remote-Repository"><a href="#Add-A-Remote-Repository" class="headerlink" title="Add A Remote Repository"></a>Add A Remote Repository</h3><p>The git remote command will let you manage and interact with remote repositories.</p>
+<pre><code class="hljs bash">git remote</code></pre>
+
+<p>If you haven’t configured a remote repository then this command will display nothing. One caveat to this is if you have cloned a repository. If you have, then your repository will automatically have a remote because it was cloned from the repository at the URL you provided. Let’s look at a repository that has been cloned.</p>
+<p>The output of git remote is just the word origin. Well that’s weird. The word “origin”, here, is referred to as a “shortname”. A shortname is just a short and easy way to refer to the location of the remote repository. A shortname is local to the current repository (as in, your local repository). The word “origin” is the defacto name that’s used to refer to the main remote repository. It’s possible to rename this to something else, but typically it’s left as “origin”.</p>
+<p>If you want to see the full path to the remote repository, then all you have to do is use the -v (verbose) flag.</p>
+<h3 id="Create-A-Simple-Project"><a href="#Create-A-Simple-Project" class="headerlink" title="Create A Simple Project"></a>Create A Simple Project</h3><p>We’re going to need a sample project to test out working with remote repositories, sending updates to the remote repository, and getting changes from the remote repository, too.</p>
+<ul>
+<li>create a new directory for your project with the name <code>my-travel-plans</code></li>
+<li>use <code>git init</code> to turn the <code>my-travel-plans</code> directory into a Git reposity</li>
+<li>create a <code>README.md</code> file</li>
+<li>create <code>index.html</code></li>
+<li>create <code>app.css</code></li>
+</ul>
+<p>README File Content</p>
+<pre><code class="hljs markdown"><span class="hljs-section"># Travel Destinations</span>
+
+A simple app to keep track of destinations I&#x27;d like to visit.</code></pre>
+
+<p>HTML File Content<br>Add the following content to the index.html file:</p>
+<pre><code class="hljs html"><span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Travels<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;description&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;css/app.css&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;destination-container&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;destination&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;florida&quot;</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Florida<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;destination&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;paris&quot;</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Paris<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+
+<p>CSS File Content<br>Add the following information to the CSS file:</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">html</span> &#123;
+    <span class="hljs-attribute">box-sizing</span>: border-box;
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+&#125;
+
+*,
+*<span class="hljs-selector-pseudo">::before</span>,
+*<span class="hljs-selector-pseudo">::after</span> &#123;
+    <span class="hljs-attribute">box-sizing</span>: inherit;
+&#125;
+
+<span class="hljs-selector-tag">body</span> &#123;
+    <span class="hljs-attribute">display</span>: flex;
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+&#125;
+
+<span class="hljs-selector-class">.container</span> &#123;
+    <span class="hljs-attribute">margin</span>: auto;
+    <span class="hljs-attribute">padding</span>: <span class="hljs-number">1em</span>;
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">80%</span>;
+&#125;
+
+<span class="hljs-selector-class">.destination-container</span> &#123;
+    <span class="hljs-attribute">display</span>: flex;
+    <span class="hljs-attribute">flex-flow</span>: wrap;
+    <span class="hljs-attribute">justify-content</span>: center;
+&#125;
+
+<span class="hljs-selector-class">.destination</span> &#123;
+    <span class="hljs-attribute">background</span>: <span class="hljs-number">#03a9f4</span>;
+    <span class="hljs-attribute">box-shadow</span>: <span class="hljs-number">0</span> <span class="hljs-number">1px</span> <span class="hljs-number">9px</span> <span class="hljs-number">0</span> <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.4</span>);
+    <span class="hljs-attribute">color</span>: white;
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0.5em</span>;
+    <span class="hljs-attribute">min-height</span>: <span class="hljs-number">200px</span>;
+    <span class="hljs-attribute">flex</span>: <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">200px</span>;
+    <span class="hljs-attribute">display</span>: flex;
+    <span class="hljs-attribute">justify-content</span>: center;
+    <span class="hljs-attribute">align-items</span>: center;
+    <span class="hljs-attribute">text-align</span>: center;
+&#125;
+
+<span class="hljs-selector-tag">h2</span> &#123;
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">rotate</span>(-<span class="hljs-number">45deg</span>);
+    <span class="hljs-attribute">text-shadow</span>: <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">5px</span> <span class="hljs-number">#01579b</span>;
+&#125;
+
+<span class="hljs-selector-id">#florida</span> &#123;
+    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#03a9f4</span>;
+&#125;
+
+<span class="hljs-selector-id">#paris</span> &#123;
+    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#d32f2f</span>;
+&#125;</code></pre>
+
+<p>Make sure to turn the project into a Git repo and committed the file with git commit.</p>
+<p>Now create a new repository on GitHub and typically you want to use the name of your project as the name of the repository. Creating a repository, modifying it later, or deleting it is relatively easy so don’t feel like you have to get the name perfect right here on this page. I’m going to create a repository called “my-travel-plans” that’s the same name as the sample project I created.</p>
+<p>I’m also going to leave the “Initialize this repository with the README” option unchecked because I don’t want GitHub to add a README file for me.</p>
+<p>Make sure that you leave the “Initialize this repository with the README” unchecked. We’ll be providing our own README, so we don’t want GitHub to provide one automatically.</p>
+<p>Also, if we let GitHub auto-generate a new README file for us, then we won’t be provided with the setup commands to run in the terminal. It’s still possible to get that information, but it will be hidden away.</p>
+<p>So just make sure to leave this field unchecked, and you’ll be good to go!</p>
+<p>Now just click that big “Create Repository” button to create your remote repository!</p>
+<p>Remember that the git remote command is used to create and manage remote repositories.</p>
+<p>There are a couple of things to notice about the command you just ran on the command line:</p>
+<ol>
+<li>first, this command has the sub command add</li>
+<li>the word origin is used - this is setting the shortname that we discussed earlier: Remember that the word origin here isn’t special in any way. If you want to change this to repo-on-GitHub, then (before running the command) just change the word “origin” to “repo-on-GitHub”: <code>$ git remote add repo-on-GitHub https://github.com/lzyacht/my-travel-plans.git</code></li>
+<li>third, the full path to the repository is added (i.e. the URL to the remote repository on the web)</li>
+</ol>
+<p>Now use <code>git remote -v</code> to verify that you’ve added the remote repository correctly.</p>
+<p>Recap</p>
+<p>A remote repository is a repository that’s just like the one you’re using but it’s just stored at a different location. To manage a remote repository, use the <code>git remote</code> command.</p>
+<ul>
+<li>It’s possible to have links to multiple different remote repositories.</li>
+<li>A shortname is the name that’s used to refer to a remote repository’s location. Typically the location is a URL, but it could be a file path on the same computer.</li>
+<li><code>git remote add</code> is used to add a connection to a new remote repository.</li>
+<li><code>git remote -v</code> is used to see the details about a connection to a remote.</li>
+</ul>
+<h3 id="Push-Changes-To-A-Remote"><a href="#Push-Changes-To-A-Remote" class="headerlink" title="Push Changes To A Remote"></a>Push Changes To A Remote</h3><p>I used the following log command to display these commits</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --oneline --graph --decorate --all</code></pre>
+
+<p>These commits are only in the local repository, though. They haven’t been sent up to the remote repository yet. When commits are sent to the remote a remote branch indicator will appear in the log. Since there aren’t any remote branch indicators we can tell that there are no commits on the remote repository. But just to be 100% certain let’s look at the remote repository on GitHub to see if there any commits.</p>
+<p>Since we haven’t sent any commits update to GitHub yet it’s still showing us the setup screen to tell us how we can connect our local repository to the remote repository and send some commits. Since this is still the setup screen we can know that there are no commits in the remote repository.</p>
+<p>To send local commits to a remote repository you need to use the <code>git push</code> command. You provide the remote short name and then you supply the name of the branch that contains the commits you want to push:</p>
+<pre><code class="hljs bash">git push &lt;remote-shortname&gt; &lt;branch&gt;</code></pre>
+
+<p>My remote’s shortname is <code>origin</code> and the commits that I want to push are on the <code>master</code> branch. So I’ll use the following command to send my commits to the remote repository on GitHub:</p>
+<pre><code class="hljs bash">git push origin master</code></pre>
+
+<p>There a couple of things to notice:</p>
+<ul>
+<li>Depending on how you have configured GitHub and the remote URL that’s being used, you might have to enter your username and password. (This will happen if you use the HTTP version of the remote rather than the ssh version.)</li>
+<li>If you have to enter your username and password your username will show up after typing but your password will not. So just keep typing your password and press enter when you’re done.</li>
+</ul>
+<p>Now before we move on, let’s just check the local repository to see how it changed after pushing.</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --oneline --graph --decorate --all</code></pre>
+
+<p>We now have a new marker in the output! This marker is <code>origin/master</code> and is called a tracking branch. A tracking branch’s name includes the shortname of the remote repository as well as the name of the branch. So the tracking branch <code>origin/master</code> is telling us that the remote origin has a master branch that points to commit 9b7d28f (and includes all of the commits before 9b7d28f). This is really helpful because this means we can track the information of the remote Repository right here in our local one!</p>
+<p>One very important thing to know is that this <code>origin/master</code> tracking branch is not a live representation of where the branch exists on the remote repository. If a change is made to the remote repository not by us but by someone else, the origin/master tracking branch in our local repository will not move. We have to tell it to go check for any updates and then it will move.</p>
+<p>Recap<br>The <code>git push</code> command is used to send commits from a local repository to a remote repository.</p>
+<pre><code class="hljs bash">git push origin master</code></pre>
+
+<p>The <code>git push</code> command takes:</p>
+<ul>
+<li>the shortname of the remote repository you want to send commits to</li>
+<li>the name of the branch that has the commits you want to send</li>
+</ul>
+<h3 id="Pulling-Changes-From-A-Remote"><a href="#Pulling-Changes-From-A-Remote" class="headerlink" title="Pulling Changes From A Remote"></a>Pulling Changes From A Remote</h3><p>Let’s say that we are in a situation where there are commits on the remote repository that we do not have in our local repository. This can happen in several ways: You could be working on a team, and a co-worker has pushed new changes to the remote. Alternatively, you could be working on the same project but from different computers – for example, say you have a work computer and a personal computer, and you contribute to the repo from both of them. If you push changes to the repo from your work computer, the local repo on your personal computer will not reflect those changes. How do we sync new changes that are on the remote into the local repository? That’s exactly where we’re going to be looking at now. Let’s first look at how pulling in remote changes works in theory, then we’ll actually do it ourselves!</p>
+<p>Since we don’t have any commits on our remote repository yet and we’re not collaborating with anybody we’re going to fake it and add some commits manually through GitHub’s interface on the web.</p>
+<p>Add the following new ruleset to app.css:</p>
+<pre><code class="hljs css"><span class="hljs-selector-class">.destination</span><span class="hljs-selector-pseudo">:hover</span> <span class="hljs-selector-tag">h2</span> &#123;
+    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">rotate</span>(<span class="hljs-number">0deg</span>);
+&#125;</code></pre>
+
+<p>Add <code>transition: transform 0.5s</code>; to the <code>h2</code> ruleset, so it should now be:</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">h2</span> &#123;
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">rotate</span>(-<span class="hljs-number">45deg</span>);
+    <span class="hljs-attribute">transition</span>: transform <span class="hljs-number">0.5s</span>;
+    <span class="hljs-attribute">text-shadow</span>: <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">5px</span> <span class="hljs-number">#01579b</span>;
+&#125;</code></pre>
+
+<p>Because GitHub has a web interface, it allows you to add commits manually through its interface. But just because you can do a thing, doesn’t mean you should. I’ve demoed making these changes this way so that we could simulate commits being on the remote repository but not in the local repository. But I recommend that you should always work locally on a project and then push those changes to the remote repository.</p>
+<p>Now let’s compare our local repository and our remote repository. We only have three commits in our local repository.</p>
+<p>While there are actually four commits in the remote repository.</p>
+<p>The local commits end at commit 5a010d1 while the remote has two extra commits - commit 4b81b2a and commit b847434.</p>
+<p>Also, notice that in our local repository when we did the git log the origin/master branch is still pointing to commit 5a010d1.</p>
+<p>Remember that the origin/master branch is not a live mapping of where the remote’s master branch is located. If the remote’s master moves, the local origin/master branch stays the same. To update this branch, we need to sync the two together.</p>
+<p>git push will sync the remote repository with the local repository. To do the opposite (to sync the local with the remote), we need to use git pull. The format for git pull is very similar to git push - you provided the shortname for the remote repository and then the name of the branch you want to pull in the commits.</p>
+<pre><code class="hljs bash">git pull origin master</code></pre>
+
+<p>There’s several things to note about running this command:</p>
+<ul>
+<li>the format is very similar to that of git push - there’s counting and compressing and packing of items</li>
+<li>it has the phrase “fast-forward” which means Git did a fast-forward merge (we’ll dig into this in just a second)</li>
+<li>it displays information similar to git log –stat where it shows the files that have been changed and how many lines were added or removed in them</li>
+</ul>
+<p>If you don’t want to automatically merge the local branch with the tracking branch then you wouldn’t use git pull you would use a different command called git fetch. You might want to do this if there are commits on the repository that you don’t have but there are also commits on the local repository that the remote one doesn’t have either.</p>
+<p>Recap</p>
+<p>If there are changes in a remote repository that you’d like to include in your local repository, then you want to pull in those changes. To do that with Git, you’d use the git pull command. You tell Git the shortname of the remote you want to get the changes from and then the branch that has the changes you want:</p>
+<pre><code class="hljs bash">git pull origin master</code></pre>
+
+<p>When git pull is run, the following things happen:</p>
+<ul>
+<li>the commit(s) on the remote branch are copied to the local repository</li>
+<li>the local tracking branch (origin/master) is moved to point to the most recent commit</li>
+<li>the local tracking branch (origin/master) is merged into the local branch (master)</li>
+</ul>
+<h3 id="Pull-vs-Fetch"><a href="#Pull-vs-Fetch" class="headerlink" title="Pull vs Fetch"></a>Pull vs Fetch</h3><p>Git fetch is used to retrieve commits from a remote repository’s branch but it does not automatically merge the local branch with the remote tracking branch after those commits have been received.</p>
+<p>You provide the exact same information to git fetch as you do for git pull. So you provide the shortname of the remote repository you want to fetch from and then the branch you want to fetch:</p>
+<pre><code class="hljs bash">git fetch origin master</code></pre>
+
+<p>When git fetch is run, the following things happen:</p>
+<ul>
+<li>the commit(s) on the remote branch are copied to the local repository</li>
+<li>the local tracking branch (e.g. origin/master) is moved to point to the most recent commit</li>
+</ul>
+<p>The important thing to note is that the local branch does not change at all.</p>
+<p>You can think of git fetch as half of a git pull. The other half of git pull is the merging aspect.</p>
+<p>One main point when you want to use git fetch rather than git pull is if your remote branch and your local branch both have changes that neither of the other ones has. In this case, you want to fetch the remote changes to get them in your local branch and then perform a merge manually. Then you can push that new merge commit back to the remote.</p>
+<p>Recap<br>You can think of the git pull command as doing two things:</p>
+<ol>
+<li>fetching remote changes (which adds the commits to the local repository and moves the tracking branch to point to them)</li>
+<li>merging the local branch with the tracking branch</li>
+</ol>
+<p>The git fetch command is just the first step. It just retrieves the commits and moves the tracking branch. It does not merge the local branch with the tracking branch. The same information provided to git pull is passed to git fetch:</p>
+<ul>
+<li>the shorname of the remote repository</li>
+<li>the branch with commits to retrieve</li>
+</ul>
+<pre><code class="hljs bash">git fetch origin master</code></pre>
+
+<h2 id="Working-On-Another-Developer’s-Repository"><a href="#Working-On-Another-Developer’s-Repository" class="headerlink" title="Working On Another Developer’s Repository"></a>Working On Another Developer’s Repository</h2><h3 id="Forking-A-Repository"><a href="#Forking-A-Repository" class="headerlink" title="Forking A Repository"></a>Forking A Repository</h3><p>In version control terminology if you “fork” a repository that means you duplicate it. Typically you fork a repository that belongs to someone else. So you make an identical copy of their repository and that duplicate copy now belongs to you.</p>
+<p>This concept of “forking” is also different from “cloning”. When you clone a repository, you get an identical copy of the repository. But cloning happens on your local machine and you clone a remote repository. When you fork a repository, a new duplicate copy of the remote repository is created. This new copy is also a remote repository, but it now belongs to you.</p>
+<h2 id="Staying-In-Sync-With-A-Remote-Repository"><a href="#Staying-In-Sync-With-A-Remote-Repository" class="headerlink" title="Staying In Sync With A Remote Repository"></a>Staying In Sync With A Remote Repository</h2><h3 id="Create-a-Pull-Request"><a href="#Create-a-Pull-Request" class="headerlink" title="Create a Pull Request"></a>Create a Pull Request</h3><p>A pull request is a request to the original or source repository’s maintainer to include changes in their project that you made in your fork of their project. You are requesting that they pull in changes you’ve made.</p>
+<p>To create a pull request, a couple of things need to happen:</p>
+<ul>
+<li>you must fork the source repository</li>
+<li>clone your fork down to your machine</li>
+<li>make some commits (ideally on a topic branch!)</li>
+<li>push the commits back to your fork</li>
+<li>create a new pull request and choose the branch that has your new commits</li>
+</ul>
+<h3 id="Stay-in-sync-with-source-project"><a href="#Stay-in-sync-with-source-project" class="headerlink" title="Stay in sync with source project"></a>Stay in sync with source project</h3><p>Stars &amp; Watching<br>If you want to keep up-to-date with the Repository, GitHub offers a convenient way to keep track of repositories - it lets you star repositories:</p>
+<p>You can go to <code>https://github.com/stars</code> to list out and filter all of the repositories that you have starred.</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Git/">Git</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Git/">Git</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/02/27/The-importance-of-NVM-for-Node-js-usage/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">The importance of NVM for Node.js installation</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/09/21/Cuda-cuDNN-configuration-for-a-Ubuntu-16-04-deep-learning-machine/">
+                        <span class="hidden-mobile">CUDA & cuDNN configuration for a Ubuntu 16.04 deep learning machine</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      © 2020
+      <i class="iconfont icon-love"></i>
+      Yaoxiang Li
+    </div>
+    <div>
+      <span id="timeDate">载入天数...</span>
+      <span id="times">载入时分秒...</span>
+      <script>
+      var now = new Date();
+      function createtime(){
+          var grt= new Date("11/27/2012 12:05:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24;
+          dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+          hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){
+              hnum = "0" + hnum;
+          }
+          minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes);
+          if(String(mnum).length ==1 ){
+                    mnum = "0" + mnum;
+          }
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds);
+          if(String(snum).length ==1 ){
+                    snum = "0" + snum;
+          }
+          document.getElementById("timeDate").innerHTML = "Running for&nbsp"+dnum+"&nbspdays";
+          document.getElementById("times").innerHTML = hnum + "&nbsphours&nbsp" + mnum + "&nbspmins&nbsp" + snum + "&nbspsecs";
+      }
+      setInterval("createtime()",250);
+      </script>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Git Tutorial&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

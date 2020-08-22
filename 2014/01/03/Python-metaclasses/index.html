@@ -1,0 +1,647 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Learning never exhausts the mind.">
+  <meta name="author" content="Yaoxiang Li">
+  <meta name="keywords" content="">
+  <title>Python metaclasses - The Seventh Paradigm</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_6peoq002giu.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>The Seventh Paradigm</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2014-01-03 12:36" pubdate>
+      January 3, 2014 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k words
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      21
+       mins
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Python metaclasses</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h2 id="Classes-as-objects"><a href="#Classes-as-objects" class="headerlink" title="Classes as objects"></a>Classes as objects</h2><p>Object-oriented programming (OOP) is a programming paradigm based on the concept of “objects”, which may encapsulate data, in the form of fields, often known as attributes; and code, in the form of procedures, often known as methods.</p>
+<p>Class is the blue print of objects, and it describes the common attributes and methods. An object is a instance of a class.</p>
+<p>For example:</p>
+<pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ObjectCreator</span>(<span class="hljs-params">object</span>):</span>
+    <span class="hljs-keyword">pass</span>
+
+my_object = ObjectCreator()
+my_object
+
+&lt;__main__.ObjectCreator object at <span class="hljs-number">0x7fda8be489b0</span>&gt;</code></pre>
+
+<p>However, what gonna happen if we run the following code?</p>
+<pre><code class="hljs python">print(ObjectCreator)
+&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> &#x27;<span class="hljs-title">__main__</span>.<span class="hljs-title">ObjectCreator</span>&#x27;&gt;</span></code></pre>
+
+<p>This object (the class) is itself capable of creating objects (the instances), and this is why it’s a class.</p>
+<p>But still, it’s an object, and therefore:</p>
+<ul>
+<li>you can assign it to a variable</li>
+<li>you can copy it</li>
+<li>you can add attributes to it</li>
+<li>you can pass it as a function parameter</li>
+</ul>
+<h2 id="Creating-classes-dynamically"><a href="#Creating-classes-dynamically" class="headerlink" title="Creating classes dynamically"></a>Creating classes dynamically</h2><p>ObjectCreator as a class can be print out, and it self is a kind of object.</p>
+<p>In some cases, we want to dynamicly create different kinds of class.</p>
+<pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">generate_cls</span>(<span class="hljs-params">a, b</span>):</span>
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Fake</span>(<span class="hljs-params">object</span>):</span>
+        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">method_a</span>(<span class="hljs-params">self, n</span>):</span>
+            <span class="hljs-keyword">return</span> n
+    Fake.a = a
+    Fake.b = b
+    <span class="hljs-keyword">return</span> Fake
+
+class1 = generate_cls(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+class2 = generate_cls(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+ins1 = class1()
+ins1.a, ins1.b, ins1.method_a(<span class="hljs-number">10</span>)
+ins2 = class2()
+ins2.a, ins2.b, ins2.method_a(<span class="hljs-number">10</span>)</code></pre>
+
+<p>There are some drawbacks for the procedure:</p>
+<ul>
+<li>Class name is not easy to modify</li>
+<li>When the attributes and methods rolling into a big number, it is hard to handle.</li>
+</ul>
+<p>Here is a another way to do the job:</p>
+<pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">method_a</span>(<span class="hljs-params">self, n</span>):</span>
+    <span class="hljs-keyword">return</span> n
+
+ins = type(<span class="hljs-string">&#x27;Fake&#x27;</span>, (), &#123;<span class="hljs-string">&#x27;a&#x27;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;b&#x27;</span>: <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;method_a&#x27;</span>: method_a&#125;)()
+
+ins.a, ins.b, ins.method_a(<span class="hljs-number">10</span>)</code></pre>
+
+<p>The <strong>type</strong> function can show you which type a object belongs to, and it has another useage, that is, create a class.</p>
+<pre><code class="hljs python">type(<span class="hljs-number">1</span>)
+type(<span class="hljs-string">&#x27;1&#x27;</span>)
+type(ObjectCreator)
+type(ObjectCreator())</code></pre>
+
+<p><strong>Type</strong> it self is a function that takes descriptions of class as inputs and a class as output, which is a <strong>metaclass</strong>. So actually, <strong>type</strong> as a metaclass create every class. As we all know that in Python, everything, and I mean everything, is an object in Python. That includes ints, strings, functions and classes. All of them are objects. And all of them have been created from a class:</p>
+<pre><code class="hljs python">age = <span class="hljs-number">15</span>
+
+age.__class__
+
+name = <span class="hljs-string">&#x27;bob&#x27;</span>
+
+name.__class__
+</code></pre>
+
+<p>Now, what is the <strong>class</strong> of any <strong>class</strong> ?</p>
+<pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>age.__class__.__class__
+&lt;type <span class="hljs-string">&#x27;type&#x27;</span>&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span>name.__class__.__class__
+&lt;type <span class="hljs-string">&#x27;type&#x27;</span>&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span>foo.__class__.__class__
+&lt;type <span class="hljs-string">&#x27;type&#x27;</span>&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span>b.__class__.__class__
+&lt;type <span class="hljs-string">&#x27;type&#x27;</span>&gt;</code></pre>
+
+<p>So, a metaclass is just the stuff that creates class objects. You can call it a ‘class factory’ if you wish. Type is the built-in metaclass Python uses, but of course, you can create your own metaclass.</p>
+<h2 id="The-metaclass-attribute"><a href="#The-metaclass-attribute" class="headerlink" title="The metaclass attribute"></a>The <strong>metaclass</strong> attribute</h2><p>You can add a <strong>metaclass</strong> attribute when you write a class:</p>
+<pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span>(<span class="hljs-params">object</span>):</span>
+    __metaclass__ = something...
+    [...]</code></pre>
+
+<p>If you do so, Python will use the metaclass to create the class Foo.</p>
+<p>You write class Foo(object) first, but the class object Foo is not created in memory yet.</p>
+<p>Python will look for <strong>metaclass</strong> in the class definition. If it finds it, it will use it to create the object class Foo. If it doesn’t, it will use type to create the class.</p>
+<p>When you do:</p>
+<pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span>(<span class="hljs-params">Bar</span>):</span>
+    <span class="hljs-keyword">pass</span></code></pre>
+
+<p>Python does the following:</p>
+<p>Is there a <strong>metaclass</strong> attribute in Foo?</p>
+<p>If yes, create in memory a class object (I said a class object, stay with me here), with the name Foo by using what is in <strong>metaclass</strong>.</p>
+<p>If Python can’t find <strong>metaclass</strong>, it will look for a <strong>metaclass</strong> at the MODULE level, and try to do the same (but only for classes that don’t inherit anything, basically old-style classes).</p>
+<p>Then if it can’t find any <strong>metaclass</strong> at all, it will use the Bar’s (the first parent) own metaclass (which might be the default type) to create the class object.</p>
+<p>Be careful here that the <strong>metaclass</strong> attribute will not be inherited, the metaclass of the parent (Bar.<strong>class</strong>) will be. If Bar used a <strong>metaclass</strong> attribute that created Bar with type() (and not type.<strong>new</strong>()), the subclasses will not inherit that behavior.</p>
+<p>Now the big question is, what can you put in <strong>metaclass</strong> ?</p>
+<p>The answer is: something that can create a class.</p>
+<p>And what can create a class? type, or anything that subclasses or uses it.</p>
+<h2 id="Custom-metaclasses"><a href="#Custom-metaclasses" class="headerlink" title="Custom metaclasses"></a>Custom metaclasses</h2><p>The main purpose of a metaclass is to change the class automatically, when it’s created.</p>
+<p>You usually do this for APIs, where you want to create classes matching the current context.</p>
+<p>Imagine a stupid example, where you decide that all classes in your module should have their attributes written in uppercase. There are several ways to do this, but one way is to set <strong>metaclass</strong> at the module level.</p>
+<p>This way, all classes of this module will be created using this metaclass, and we just have to tell the metaclass to turn all attributes to uppercase.</p>
+<p>Luckily, <strong>metaclass</strong> can actually be any callable, it doesn’t need to be a formal class (I know, something with ‘class’ in its name doesn’t need to be a class, go figure… but it’s helpful).</p>
+<p>So we will start with a simple example, by using a function.</p>
+<pre><code class="hljs python"><span class="hljs-comment"># the metaclass will automatically get passed the same argument</span>
+<span class="hljs-comment"># that you usually pass to `type`</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">upper_attr</span>(<span class="hljs-params">future_class_name, future_class_parents, future_class_attr</span>):</span>
+    <span class="hljs-string">&quot;&quot;&quot;</span>
+<span class="hljs-string">      Return a class object, with the list of its attribute turned</span>
+<span class="hljs-string">      into uppercase.</span>
+<span class="hljs-string">    &quot;&quot;&quot;</span>
+
+    <span class="hljs-comment"># pick up any attribute that doesn&#x27;t start with &#x27;__&#x27; and uppercase it</span>
+    uppercase_attr = &#123;&#125;
+    <span class="hljs-keyword">for</span> name, val <span class="hljs-keyword">in</span> future_class_attr.items():
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> name.startswith(<span class="hljs-string">&#x27;__&#x27;</span>):
+            uppercase_attr[name.upper()] = val
+        <span class="hljs-keyword">else</span>:
+            uppercase_attr[name] = val
+
+    <span class="hljs-comment"># let `type` do the class creation</span>
+    <span class="hljs-keyword">return</span> type(future_class_name, future_class_parents, uppercase_attr)
+
+__metaclass__ = upper_attr <span class="hljs-comment"># this will affect all classes in the module</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span>():</span> <span class="hljs-comment"># global __metaclass__ won&#x27;t work with &quot;object&quot; though</span>
+    <span class="hljs-comment"># but we can define __metaclass__ here instead to affect only this class</span>
+    __metaclass__ = upper_attr
+    <span class="hljs-comment"># and this will work with &quot;object&quot; children</span>
+    bar = <span class="hljs-string">&#x27;bip&#x27;</span>
+
+print(hasattr(Foo, <span class="hljs-string">&#x27;bar&#x27;</span>))
+<span class="hljs-comment"># Out: False</span>
+print(hasattr(Foo, <span class="hljs-string">&#x27;BAR&#x27;</span>))
+<span class="hljs-comment"># Out: True</span>
+
+f = Foo()
+print(f.BAR)
+<span class="hljs-comment"># Out: &#x27;bip&#x27;</span></code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Metaclass/">Metaclass</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2014/07/14/Basic-MySQL-Setup-on-Ubuntu-Server/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Basic MySQL Setup on Ubuntu Server</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2013/07/14/Consolas-Font-On-Ubuntu/">
+                        <span class="hidden-mobile">Consolas Font On Ubuntu</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      © 2020
+      <i class="iconfont icon-love"></i>
+      Yaoxiang Li
+    </div>
+    <div>
+      <span id="timeDate">载入天数...</span>
+      <span id="times">载入时分秒...</span>
+      <script>
+      var now = new Date();
+      function createtime(){
+          var grt= new Date("11/27/2012 12:05:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24;
+          dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+          hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){
+              hnum = "0" + hnum;
+          }
+          minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes);
+          if(String(mnum).length ==1 ){
+                    mnum = "0" + mnum;
+          }
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds);
+          if(String(snum).length ==1 ){
+                    snum = "0" + snum;
+          }
+          document.getElementById("timeDate").innerHTML = "Running for&nbsp"+dnum+"&nbspdays";
+          document.getElementById("times").innerHTML = hnum + "&nbsphours&nbsp" + mnum + "&nbspmins&nbsp" + snum + "&nbspsecs";
+      }
+      setInterval("createtime()",250);
+      </script>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Python metaclasses&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
