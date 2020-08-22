@@ -218,7 +218,7 @@
 
 <h2 id="Update-the-sources-list-to-include-latest-R-dist"><a href="#Update-the-sources-list-to-include-latest-R-dist" class="headerlink" title="Update the sources.list to include latest R dist"></a>Update the sources.list to include latest R dist</h2><pre><code class="hljs bash">sudo sh -c <span class="hljs-string">&quot;echo deb https://cloud.r-project.org/bin/linux/ubuntu xenial-cran35/ &gt;&gt; /etc/apt/sources.list&quot;</span></code></pre>
 
-<p>The Ubuntu archives on CRAN are signed with the key of “Michael Rutter <a href="mailto:&#109;&#x61;&#114;&#x75;&#116;&#116;&#101;&#x72;&#x40;&#103;&#109;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#109;&#x61;&#114;&#x75;&#116;&#116;&#101;&#x72;&#x40;&#103;&#109;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;</a>” with key ID E084DAB9. To add the key to your system with one command use</p>
+<p>The Ubuntu archives on CRAN are signed with the key of “Michael Rutter <a href="mailto:&#x6d;&#97;&#114;&#117;&#116;&#116;&#101;&#114;&#x40;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#109;">&#x6d;&#97;&#114;&#117;&#116;&#116;&#101;&#114;&#x40;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#109;</a>” with key ID E084DAB9. To add the key to your system with one command use</p>
 <pre><code class="hljs bash">sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9</code></pre>
 
 <h2 id="Install-R"><a href="#Install-R" class="headerlink" title="Install R"></a>Install R</h2><pre><code class="hljs bash">sudo apt-get update &amp;&amp; sudo apt-get install -y r-base r-base-dev</code></pre>
